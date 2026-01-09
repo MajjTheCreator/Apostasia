@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostasia - Guestbook</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <h1 class="tp">APOSTASIA</h1>
+        <div class="lang-switch">
+    <button class="lang-btn" onclick="toggleLanguage()">PT / EN</button>
+        </div>
+        <nav>
+            <ul>
+                <li>
+                    <span class="lang-pt"><a href="index.html">Home</a></span>
+                    <span class="lang-en"><a href="index.html">Home</a></span>
+                </li>
+                <li>
+                    <span class="lang-pt"><a href="roll.html">Ler</a></span>
+                    <span class="lang-en"><a href="roll.html">Read</a></span>
+                </li>
+                <li>
+                    <span class="lang-pt"><a href="about.html">Devlog</a></span>
+                    <span class="lang-en"><a href="about.html">Devlog</a></span>
+                </li>
+                <li>
+                    <span class="lang-pt"><a href="guestbook.html">Livro de visistas</a></span>
+                    <span class="lang-en"><a href="guestbook.html">Guestbook</a></span>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="guestbook-container">
+        <section class="gb-form-section">
+            <h2>
+                <span class="lang-pt"></span>Assine o Livro de Visitas</span>
+                <span class="lang-en">Sign the Guestbook</span>
+            </h2>
+            <p>
+                <span class="lang-pt">Deixe a sua marca nesta jornada sombria.</span>
+                <span class="lang-en">Leave your mark on this dark journey.</span>
+            </p>
+
+            <form class="gb-form">
+                <input type="text" placeholder="Teu Nome/Nickname" required>
+                <textarea placeholder="Deixe a sua mensagem..." rows="5" required></textarea>
+                <button type="submit" class="btn-send">
+                    <span class="lang-pt">Enviar Mensagem</span>
+                    <span class="lang-en">Send Message</span>
+                </button>
+            </form>
+        </section>
+
+        <hr>
+
+        <section class="gb-messages">
+            <h3>Mensagens Recentes</h3>
+            
+        </section>
+    </main>
+    <footer>
+    <div class="footer-content">
+        <div class="footer-brand">
+            <h2 class="footer-logo">APOSTASIA</h2>
+        </div>
+        
+        <div class="footer-links">
+            <h4>
+                <span class="lang-pt">Navegação</span>
+                <span class="lang-en">Navigation</span>
+            </h4>
+            <ul>
+                <li>
+                    <span class="lang-pt"><a href="index.html">Home</a></span>
+                    <span class="lang-en"><a href="index.html">Home</a></span>
+                </li>
+                <li>
+                    <span class="lang-pt"><a href="roll.html">Ler</a></span>
+                    <span class="lang-en"><a href="roll.html">Read</a></span>
+                </li>
+                <li>
+                    <span class="lang-pt"><a href="about.html">Devlog</a></span>
+                    <span class="lang-en"><a href="about.html">Devlog</a></span>
+                </li>
+                <li>
+                    <span class="lang-pt"><a href="guestbook.html">Livro de visitas</a></span>
+                    <span class="lang-en"><a href="guestbook.html">Guestbook</a></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer-social">
+            <h4>
+                <span class="lang-pt">Siga o Projeto</span>
+                <span class="lang-en">Follow the Project</span>
+            </h4>
+            <div class="social-icons">
+                <a href="#" title="Instagram">IG</a>
+                <a href="#" title="Twitter/X">TW</a>
+                <a href="#" title="ArtStation">AS</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Apostasia Comic. Todos os direitos reservados aos deuses esquecidos.</p>
+        <div class="made-by">Criado por [Seu Nome/Nickname]</div>
+    </div>
+</footer>
+<script>
+    const _supabase = supabase.createClient('https://wiqgfmrtzixrlbiuuvgk.supabase.co', 'sb_publishable_5uBRv7XLN4Hhdu7sY2dYMw_J3AV3lEt');
+
+const form = document.querySelector('.gb-form');
+const messagesContainer = document.querySelector('.gb-messages');
+
+// 1. Função para carregar mensagens
+async function loadMessages() {
+    const { data, error } = await _supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) console.error('Erro ao carregar:', error);
+    else {
+        messagesContainer.innerHTML = '<h3>Mensagens Recentes</h3>'; // Limpa e põe o título
+        data.forEach(msg => {
+            const date = new Date(msg.created_at).toLocaleDateString('pt-BR');
+            const card = `
+                <div class="gb-card">
+                    <div class="gb-header">
+                        <span class="gb-author">${msg.author}</span>
+                        <span class="gb-date">${date}</span>
+                    </div>
+                    <p class="gb-text">${msg.content}</p>
+                </div>
+            `;
+            messagesContainer.innerHTML += card;
+        });
+    }
+}
+
+// 2. Função para enviar mensagem
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const author = form.querySelector('input').value;
+    const content = form.querySelector('textarea').value;
+
+    const { error } = await _supabase
+        .from('messages')
+        .insert([{ author, content }]);
+
+    if (error){
+         alert('Erro ao enviar!') 
+        console.log(error);
+    }
+    else {
+        form.reset();
+        loadMessages(); // Recarrega a lista
+    }
+});
+
+// Carregar ao abrir a página
+loadMessages();
+</script>
+<script>
+    function toggleLanguage() {
+    const body = document.body;
+    body.classList.toggle('en');
+    
+    // Salva a preferência no navegador do usuário
+    const isEn = body.classList.contains('en');
+    localStorage.setItem('pref-lang', isEn ? 'en' : 'pt');
+}
+
+// Verifica a preferência ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('pref-lang');
+    if (savedLang === 'en') {
+        document.body.classList.add('en');
+    }
+});
+</script>
+</body>
+</html>
