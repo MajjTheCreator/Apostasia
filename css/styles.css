@@ -1,0 +1,567 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'PT Serif', serif;
+}
+
+/* Por padrão, esconde o inglês */
+.lang-en { display: none; }
+
+/* Quando o body tiver a classe 'en', inverte */
+body.en .lang-pt { display: none; }
+body.en .lang-en { display: inline; } /* ou block, dependendo do elemento */
+
+/* Botão de troca de idioma (estilo metalizado) */
+.lang-switch {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.lang-btn {
+    background: #111;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+    padding: 10px;
+    cursor: pointer;
+    font-family: 'PT Serif', serif;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+body {
+    background-color: #050505;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Fundo de estrelas */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 50px 160px, #ddd, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 250px 250px;
+    animation: piscar 3s infinite alternate;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+}
+
+header {
+    background-color: rgba(5, 5, 5, 0.95);
+    padding-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #333;
+}
+
+header h1 {
+    width: 100%;
+    font-size: 48px;
+    margin-top: 20px;
+    letter-spacing: 12px;
+    text-align: center;
+    animation: glow 4s infinite alternate;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    width: 100vw;
+}
+
+nav ul li {
+    flex: 1;
+    border-bottom: rgba(255,255,255,0.1) solid 1px;
+    transition: 0.5s;
+}
+
+nav ul li a {
+    display: block;
+    padding: 15px 0;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+}
+
+nav ul li:hover {
+    border-bottom: #FFD700 solid 4px;
+    background: rgba(255, 215, 0, 0.05);
+}
+
+/* --- ESTILIZAÇÃO DAS SESSÕES --- */
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+section {
+    margin-bottom: 120px;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: reveal linear forwards;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+}
+
+/* Sessão 1: Centralizada e imponente */
+.comic-intro {
+    text-align: center;
+}
+
+.comic-pages{
+    gap: 10xp;
+}
+
+.comic-img {
+    max-width: 400px; /* Ajuste o tamanho da sua capa aqui */
+    width: 100%;
+    margin: 0 auto 30px;
+    display: block;
+    border: 3px solid #222;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+}
+
+/* Sessão 2: Estilo "Manuscrito/Relato" */
+.artist-about {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 40px;
+    border-left: 2px solid #FFD700;
+    font-style: italic;
+}
+
+/* Sessão 3: Apoio - Totalmente centralizada */
+.support-project {
+    text-align: center;
+    background: linear-gradient(to bottom, transparent, #111, transparent);
+    padding: 60px 20px;
+}
+
+.qrcode-placeholder {
+    margin: 30px auto;
+    width: 220px;
+    padding: 10px;
+    background: #fff; /* QR Code precisa de fundo branco para ler bem */
+    border-radius: 4px;
+}
+
+.qrcode-img {
+    width: 100%;
+    display: block;
+}
+
+/* --- ESTILO DO LEITOR (ROLL) --- */
+
+/* Ajuste para o container de leitura */
+.reader-container {
+    max-width: 800px; /* Largura ideal para leitura de webcomics */
+    margin: 0 auto;
+    padding: 0; /* Remove padding lateral para a imagem encostar na borda se quiser */
+}
+
+.chapter-info {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.chapter-info h2 {
+    color: #FFD700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+/* O segredo da tela infinita: remover espaços entre imagens */
+.comic-pages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page {
+    width: 100%;
+    height: auto;
+    display: block; /* Remove o espaço fantasma embaixo da imagem */
+    margin-bottom: 0; /* Cola uma imagem na outra */
+    border: none;
+}
+
+.reader-footer {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.btn-comment {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 15px 30px;
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-comment:hover {
+    background: #FFD700;
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+/* Suavizar a rolagem */
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* --- GUESTBOOK STYLES --- */
+
+.guestbook-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.gb-form-section {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.gb-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Inputs com vibe metalizada/sombria */
+.gb-form input, .gb-form textarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.gb-form input:focus, .gb-form textarea:focus {
+    outline: none;
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.btn-send {
+    background: linear-gradient(145deg, #e0e0e0 0%, #bebebe 100%); /* Efeito Metal */
+    color: #000;
+    padding: 15px;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 4px;
+}
+
+.btn-send:hover {
+    background: #FFD700;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Cards de Mensagem */
+.gb-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    border: 1px solid #333;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    position: relative;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.gb-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+.gb-author {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.gb-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.gb-text {
+    font-style: italic;
+    color: #ddd;
+}
+
+/* --- DEVLOG / BEHIND THE SCENES --- */
+
+.devlog-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.devlog-intro {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.devlog-post {
+    background: rgba(20, 20, 20, 0.6);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 80px;
+    transition: 0.4s;
+}
+
+.devlog-post:hover {
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+}
+
+.devlog-date {
+    font-size: 14px;
+    color: #FFD700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.devlog-img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #444;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.devlog-content h3 {
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.devlog-content p {
+    color: #bbb;
+    line-height: 1.6;
+}
+
+/* Efeito de moldura nas imagens do devlog */
+.devlog-img:hover {
+    filter: brightness(1.1);
+    cursor: zoom-in;
+}
+
+/* --- FOOTER BONITÃO --- */
+
+footer {
+    background: linear-gradient(to top, #000 0%, #050505 100%);
+    border-top: 1px solid #333;
+    padding: 60px 20px 20px;
+    margin-top: 100px;
+    position: relative;
+    z-index: 2; /* Garante que fique acima das estrelas */
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    padding-bottom: 40px;
+}
+
+.footer-logo {
+    color: #FFD700;
+    font-size: 28px;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+.footer-brand p {
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+}
+
+.footer-links h4, .footer-social h4 {
+    color: #fff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links ul li {
+    margin-bottom: 10px;
+}
+
+.footer-links ul li a {
+    color: #888;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 15px;
+}
+
+.footer-links ul li a:hover {
+    color: #FFD700;
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    border-radius: 4px;
+    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.social-icons a:hover {
+    border-color: #FFD700;
+    color: #FFD700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    max-width: 1000px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #555;
+    font-size: 12px;
+}
+
+
+.made-by {
+    color: #777;
+    letter-spacing: 1px;
+}
+
+/* Responsividade para o footer */
+@media (max-width: 600px) {
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Animações */
+@keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #FFD700; }
+    to { text-shadow: 0 0 25px #FFD700, 0 0 5px #fff; }
+}
+
+@keyframes piscar {
+    to { opacity: 0.6; transform: scale(1.05); }
+}
+/* --- LÓGICA DO MENU HAMBURGUER --- */
+
+/* Esconde o checkbox */
+
+
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+
+/* --- LÓGICA DO MENU HAMBURGUER --- */
+
+/* Esconde o checkbox */
+/* Esconde o check e o ícone no Desktop */
+.menu-check, .hamburguer-icon { display: none; }
+
+@media (max-width: 768px) {
+    .hamburguer-icon {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 15px;
+        position: absolute;
+        right: 10px;
+        top: 20px;
+    }
+    header h1{
+        font-size: 28px;
+    }
+    
+    .hamburguer-icon span { width: 30px; height: 3px; background: #FFD700; transition: 0.3s; }
+
+    .nav-links {
+        display: none; /* Menu escondido */
+        width: 100%;
+        flex-direction: column;
+        background: #050505;
+        border-top: 1px solid #333;
+    }
+
+    /* Quando clica no ícone, o checkbox é marcado e o menu aparece */
+    .menu-check:checked ~ .nav-links {
+        display: flex;
+    }
+
+    /* Animação do X */
+    .menu-check:checked ~ .hamburguer-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-check:checked ~ .hamburguer-icon span:nth-child(2) { opacity: 0; }
+    .menu-check:checked ~ .hamburguer-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+}
+/* Responsividade Mobile (Abaixo de 768px) */
